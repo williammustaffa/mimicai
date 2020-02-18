@@ -1,0 +1,9 @@
+{
+    "preferences": {
+        "food": ["frech fries", "apples"],
+        "car": ["ferrari"],
+        "hobby": ["hack"],
+        "book": ["Eragon", "Lord Of The Rings"],
+        "name": ["Jarvis"]
+    }
+}

@@ -1,0 +1,96 @@
+{
+  "subjects": {
+    "members": ["i", "you", "he", "she", "it", "we", "they"],
+    "schema": {
+      "i": {
+        "object": "me",
+        "possessive": "my",
+        "target": "you",
+        "plural": [0]
+      },
+      "you": {
+        "object": "you",
+        "possessive": "your",
+        "target": "i",
+        "plural": [0, 1]
+      },
+      "he": {
+        "object": "him",
+        "possessive": "his",
+        "target": "he",
+        "plural": [0]
+      },
+      "she": {
+        "object": "her",
+        "possessive": "her",
+        "target": "she",
+        "plural": [0]
+      },
+      "it": {
+        "object": "it",
+        "possessive": "its",
+        "alike": ["that", "those", "these"],
+        "target": "it",
+        "plural": [0]
+      },
+      "we": {
+        "object": "us",
+        "possessive": "ours",
+        "target": "we",
+        "plural": [1]
+      },
+      "they": {
+        "object": "them",
+        "posessive": "their",
+        "target": "they",
+        "plural": [1]
+      }
+    }
+  },
+  "questions": {
+    "members": ["what", "which", "where", "when", "why", "who", "how"],
+    "templates": [
+      "${question} ${verb} ${subject.possesive} ${object}",
+      "${question} ${verb} ${object}"
+    ],
+    "schema": {
+      "what": {
+        "target": "any"
+      },
+      "which": {
+        "target": "any"
+      },
+      "where": {
+        "target": "place"
+      },
+      "when": {
+        "target": "time"
+      },
+      "why": {
+        "target": "any"
+      },
+      "who": {
+        "target": "person"
+      },
+      "how": {
+        "target": "any"
+      }
+    }
+  },
+  "greetings": {
+    "members": ["hello", "hi", "hey"],
+    "schema": {
+      "hi": {},
+      "hello": {},
+      "hey": {}
+    }
+  },
+  "farewall": {
+    "members": ["bye", "goodbye", "see you"],
+    "schema": {
+      "bye": {},
+      "goodbye": {},
+      "see you": {}
+    }
+  }
+}
