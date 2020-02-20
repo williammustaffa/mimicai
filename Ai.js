@@ -1,5 +1,3 @@
-const stringSimilarity = require('string-similarity');
-const utils = require('./utils');
 const Brain = require('./Brain');
 
 class AI {
