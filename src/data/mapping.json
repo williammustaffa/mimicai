@@ -3,30 +3,35 @@
     "members": ["i", "you", "he", "she", "it", "we", "they"],
     "schema": {
       "i": {
+        "id": "i",
         "object": "me",
         "possessive": "my",
         "target": "you",
         "plural": [0]
       },
       "you": {
+        "id": "you",
         "object": "you",
         "possessive": "your",
         "target": "i",
         "plural": [0, 1]
       },
       "he": {
+        "id": "he",
         "object": "him",
         "possessive": "his",
         "target": "he",
         "plural": [0]
       },
       "she": {
+        "id": "she",
         "object": "her",
         "possessive": "her",
         "target": "she",
         "plural": [0]
       },
       "it": {
+        "id": "it",
         "object": "it",
         "possessive": "its",
         "alike": ["that", "those", "these"],
@@ -34,12 +39,14 @@
         "plural": [0]
       },
       "we": {
+        "id": "we",
         "object": "us",
         "possessive": "ours",
         "target": "we",
         "plural": [1]
       },
       "they": {
+        "id": "they",
         "object": "them",
         "posessive": "their",
         "target": "they",
@@ -48,12 +55,15 @@
     }
   },
   "questions": {
-    "members": ["what", "which", "where", "when", "why", "who", "how"],
+    "members": ["what", "which", "where", "when", "why", "who", "how", "do"],
     "templates": [
       "${question} ${verb} ${subject.possesive} ${object}",
       "${question} ${verb} ${object}"
     ],
     "schema": {
+      "do": {
+        "target": "any"
+      },
       "what": {
         "target": "any"
       },
@@ -78,7 +88,7 @@
     }
   },
   "greetings": {
-    "members": ["hello", "hi", "hey"],
+    "members": ["hello", "hi", "hey", "sup"],
     "schema": {
       "hi": {},
       "hello": {},

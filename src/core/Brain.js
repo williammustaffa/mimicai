@@ -13,6 +13,10 @@ class Brain {
   constructor(path) {
     this.path = path;
     this.data = {};
+    this.requestedAnswer = false;
+    this.preferences = {
+      i: personal.preferences || {}
+    }
   }
 
   async init() {
@@ -63,53 +67,71 @@ class Brain {
 
     logger.debug(`question: ${question}`);
 
-    // Answering questions
-    if (subject && !!question) {
-      const _subject = mapping.subjects.schema[subject.target];
+    if (subject) {
+      if (this.requestedAnswer) {
+        console.log("praia", subject, results);
+      } else if (!!question) {
+        const _subject = mapping.subjects.schema[subject.target];
 
-      // Possessive answerwhat 
-      if (subject.isPossessive) {
-        const _possessiveSubject = _subject.possessive;
+        // Possessive answerwhat 
+        if (subject.isPossessive) {
+          const _possessiveSubject = _subject.possessive;
 
-        const _object = results.contexts.splice(
-          results.contexts.indexOf(subject.possessive) + 1,
-          results.contexts.length - 1
-        ).join(' ');
+          const _object = results.contexts.splice(
+            results.contexts.indexOf(subject.possessive) + 1,
+            results.contexts.length - 1
+          ).join(' ');
 
-        const _verb = results.contexts[results.contexts.indexOf(question) + 1];
+          const _verb = results.contexts[results.contexts.indexOf(question) + 1];
 
-        const _answer = Object.keys(personal.preferences).reduce((prev, curr) => {
-          const answerObject = personal.preferences[curr];
-          const answerRegexp = new RegExp(curr, 'i');
+          const _preferences = this.preferences[_subject.id] || {};
+          const _answer = Object.keys(_preferences).reduce((prev, curr) => {
+            const answerObject = personal.preferences[curr];
+            const answerRegexp = new RegExp(curr, 'i');
 
-          if (_object.match(answerRegexp)) {
-            return answerObject.join(' and ');
+            if (_object.match(answerRegexp)) {
+              return answerObject.join(' and ');
+            }
+
+            return prev;
+          }, null)
+
+          logger.debug(`_possessiveSubject: ${_possessiveSubject}`);
+          logger.debug(`_object: ${_object}`);
+          logger.debug(`_verb: ${_verb}`);
+          logger.debug(`_answer: ${_answer}`);
+
+          if (_answer) {
+            keywords.push(_possessiveSubject);
+            keywords.push(_object);
+            keywords.push(_verb);
+            keywords.push(_answer);
+          } else {
+            keywords.push('I don\'t know.');
+            keywords.push(question);
+            keywords.push(_verb);
+            keywords.push(_possessiveSubject);
+            keywords.push(`${_object}?`);
+
+            this.requestedAnswer = {
+              subject: _subject.id,
+              object: _object
+            };
           }
 
-          return prev;
-        }, null)
+        } else {
+          const _subject = subject.target;
+          const _object = results.contexts.splice(
+            results.contexts.indexOf(subject.key) + 1,
+            results.contexts.length - 1
+          ).join(' ');
 
-        logger.debug(`_possessiveSubject: ${_possessiveSubject}`);
-        logger.debug(`_object: ${_object}`);
-        logger.debug(`_verb: ${_verb}`);
-        logger.debug(`_answer: ${_answer}`);
+          logger.debug(`_subject: ${_subject}`);
+          logger.debug(`_object: ${_object}`);
 
-        keywords.push(_possessiveSubject);
-        keywords.push(_object);
-        keywords.push(_verb);
-        keywords.push(_answer);
-      } else {
-        const _subject = subject.target;
-        const _object = results.contexts.splice(
-          results.contexts.indexOf(subject.key) + 1,
-          results.contexts.length - 1
-        ).join(' ');
-
-        logger.debug(`_subject: ${_subject}`);
-        logger.debug(`_object: ${_object}`);
-
-        keywords.push(_subject);
-        keywords.push(_object);
+          keywords.push(_subject);
+          keywords.push(_object);
+        }
       }
     }
 
