@@ -1,9 +1,10 @@
 const fs = require('fs');
 const util = require("util");
-const logger = require("./logger");
+const path = require("path");
 const utils = require("./utils");
-const mapping = require("./mapping.json");
-const personal = require("./personal.json");
+const logger = require("../logger");
+const mapping = require("../data/mapping.json");
+const personal = require("../data/personal.json");
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -20,12 +21,12 @@ class Brain {
   }
 
   async load() {
-    const content = await readFile(this.path, 'utf8');
+    const content = await readFile(path.join(__dirname, this.path), 'utf8');
     return JSON.parse(content);
   }
 
   async save() {
-    await writeFile(this.path, JSON.stringify(this.data), 'utf8');
+    await writeFile(path.join(__dirname, this.path), JSON.stringify(this.data), 'utf8');
   }
 
   async learn(file) {

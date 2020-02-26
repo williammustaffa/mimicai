@@ -5,7 +5,7 @@ class AI {
     this.data = [];
     this.ready = false;
 
-    this.brain = new Brain('./brain.json')
+    this.brain = new Brain('../data/brain.json')
 
     this.init();
   } 
