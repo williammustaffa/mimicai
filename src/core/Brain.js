@@ -65,15 +65,48 @@ class Brain {
       return results.contexts.find(ctx => ctx.match(new RegExp(q, 'i')));
     }) || null;
 
+    const greeting = mapping.greetings.members.find(q => {
+      return results.contexts.find(ctx => ctx.match(new RegExp(q, 'i')));
+    }) || null;
+
     logger.debug(`question: ${question}`);
+    logger.debug(`greeting: ${greeting}`);
+
+
+    if (greeting) {
+      const greetingDefinition = mapping.greetings.schema[greeting];
+      const response = greetingDefinition.feedbacks[
+        Math.floor(greetingDefinition.feedbacks.length * Math.random())
+      ];
+
+      keywords.push(response)
+    }
 
     if (subject) {
       if (this.requestedAnswer) {
-        console.log("praia", subject, results);
-      } else if (!!question) {
+        const _object = results.contexts.splice(-1).join(' ');
+
+        if (!this.preferences[this.requestedAnswer.subject]) {
+          this.preferences[this.requestedAnswer.subject] = {};
+        }
+
+        if (!this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object]) {
+          this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object] = [];
+        }
+
+        const targetPrefence = this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object];
+
+        targetPrefence.push(_object);
+        keywords.push(`Nice! ${_object} it is.`);
+
+        this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object] = targetPrefence;
+        this.requestedAnswer = false;
+      }
+
+      if (!!question) {
         const _subject = mapping.subjects.schema[subject.target];
 
-        // Possessive answerwhat 
+        // Possessive answer what 
         if (subject.isPossessive) {
           const _possessiveSubject = _subject.possessive;
 
@@ -86,7 +119,7 @@ class Brain {
 
           const _preferences = this.preferences[_subject.id] || {};
           const _answer = Object.keys(_preferences).reduce((prev, curr) => {
-            const answerObject = personal.preferences[curr];
+            const answerObject = _preferences[curr];
             const answerRegexp = new RegExp(curr, 'i');
 
             if (_object.match(answerRegexp)) {
@@ -132,6 +165,26 @@ class Brain {
           keywords.push(_subject);
           keywords.push(_object);
         }
+      }
+    } else {
+      if (this.requestedAnswer) {
+        const _object = results.contexts.join('');
+
+        if (!this.preferences[this.requestedAnswer.subject]) {
+          this.preferences[this.requestedAnswer.subject] = {};
+        }
+
+        if (!this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object]) {
+          this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object] = [];
+        }
+
+        const targetPrefence = this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object];
+
+        targetPrefence.push(_object);
+        keywords.push(`Nice! ${_object} it is.`);
+
+        this.preferences[this.requestedAnswer.subject][this.requestedAnswer.object] = targetPrefence;
+        this.requestedAnswer = false;
       }
     }
 

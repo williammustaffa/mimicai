@@ -90,9 +90,18 @@
   "greetings": {
     "members": ["hello", "hi", "hey", "sup"],
     "schema": {
-      "hi": {},
-      "hello": {},
-      "hey": {}
+      "hi": {
+        "feedbacks": ["hey", "hi", "hello"]
+      },
+      "hello": {
+        "feedbacks": ["hey", "hi", "hello"]
+      },
+      "hey": {
+        "feedbacks": ["hey", "hi", "hello"]
+      },
+      "sup": {
+        "feedbacks": ["nothing", "suuuup", "hi", "hello"]
+      }
     }
   },
   "farewall": {
